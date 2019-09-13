@@ -1,0 +1,42 @@
+//-nav#top.nav.has-shadow(style="background-color:#2d3e63")
+if tipoMenuAdmin == 'admin'
+	menu(menutipe= "'adminGlobal'")
+else
+	menu(menutipe= "'datos'")
+.box
+	.title {{ 'Escunper' | translate }}
+	form(name="mainF")
+		label.label 
+		p.select.control.has-icon.has-icon-right
+			select.select(name="mySelect" id="mySelect"
+	     			 ng-options="optionM.tperfil_name for optionM in $ctrl.ListaPerfiles track by optionM.tperfil_id"
+	     			 ng-model="$ctrl.perfilSelected"
+	     			 ng-change="$ctrl.asigOperaciones($ctrl.perfilSelected)")
+section.section(ng-show='$ctrl.asignarOperaciones')
+	.title Escoja la operacion 
+	a.button.is-prymary(ng-click="$ctrl.btnAgregar()") GUARDAR
+	table.table
+			thead
+				tr
+					th
+					th
+					th {{ 'Nombre' | translate }}
+					th {{ 'descrip' | translate }}
+			tfoot
+				tr
+					th
+					th
+					th {{ 'Nombre' | translate }}
+					th {{ 'descrip' | translate }}
+			tbody
+				tr(ng-repeat="LisOper in $ctrl.ListaOperaciones")
+					td
+						a.button.is-success(ng-click="updEmpresa(LisOper)")
+							i.fa.fa-pencil
+					td
+						input(type='checkbox' ng-model="isTrue" ng-checked="{{LisOper.asignado}}" ng-click="$ctrl.elegirOpe(LisOper.tops_id,isTrue )")
+					td {{LisOper.tops_name}}
+					td {{LisOper.tops_descripcion}}
+
+
+

@@ -1,0 +1,80 @@
+//-nav#top.nav.has-shadow(style="background-color:#2d3e63")
+menu(menutipe= "'datos'")
+section.section(ng-init="$ctrl.cargaBodegas()")
+	button.button.is-primary.is-outlined( ng-click="$ctrl.mostrarForm()") NUEVO
+	.title Bodega 	
+	form(name="bodF", ng-show='$ctrl.visible')
+		label.label {{ 'cod' | translate }}
+		p.control
+			input.input(type='number', placeholder='Codigo', ng-model="$ctrl.data.bod_id", readonly ="true")
+		label.label {{ 'name' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!bodF.bod_nombre.$error.required}", type='text',name="bod_nombre",placeholder="{{ 'name' | translate }}",ng-model="$ctrl.data.bod_nombre", required)
+			i.fa.fa-check 
+			span.help.is-danger(ng-show="bodF.bod_nombre.$Ubity && bodF.bod_nombre.$error.required") {{ 'name' | translate }} {{ 'controlRequired' | translate}}
+		label.label {{ 'Tipo' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!bodF.bod_tipo.$error.required}", type='text',name="bod_tipo",placeholder="{{ 'Tipo' | translate }}",ng-model="$ctrl.data.bod_tipo", required)
+			i.fa.fa-check 
+			span.help.is-danger(ng-show="bodF.bod_tipo.$Ubity && bodF.bod_tipo.$error.required") {{ 'Tipo' | translate }} {{ 'controlRequired' | translate}}
+		label.label {{ 'Ubi' | translate }}
+		p.control.has-icon.has-icon-right
+			textarea.input(type='text',name="bod_ubicacion",rows="5",cols="40",style="height:150px;" ,placeholder="{{ 'Ubi' | translate }}",ng-model="$ctrl.data.bod_ubicacion")
+		label.label {{ 'Dispon' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(type='number',name="bod_disponible",placeholder="{{ 'Dispon' | translate }}",ng-model="$ctrl.data.bod_disponible")
+		label.label {{ 'Tel' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(type='text',name="bod_telefono",placeholder="{{ 'Tel' | translate }}",ng-model="$ctrl.data.bod_telefono")
+		//-label.label {{ 'empresa' | translate }}
+			span.select.control.has-icon.has-icon-right
+				select.select(data-ng-model='$ctrl.data.emp_id',required, name='emp_id',ng-class="{ 'is-danger' : bodF.emp_id.$error.required && !bodF.$pristine }")
+					option(ng-repeat='empB in $ctrl.ListaEmpresas',ng-value='{{empB.emp_id}}',ng-selected="$ctrl.data.emp_id == empB.emp_id")
+							| {{empB.emp_nombre}}
+		label.label Estado
+		p.control
+			label.radio
+				input(type='radio', name='bod_sts',ng-model="$ctrl.data.bod_sts" value='1')
+				|&nbsp; Activo
+			label.radio
+				input(type='radio', name='bod_sts',ng-model="$ctrl.data.bod_sts" value='0')
+				|&nbsp; Inactivo
+		p.control
+			button.button.is-primary(ng-click="$ctrl.btnAgregar()", ng-disabled='!bodF.$valid') GUARDAR  
+			button.button(ng-click="$ctrl.btnLimpiar(bodF)") Limpiar
+table.table
+		thead
+			tr
+				th
+				th {{'name' | translate}}
+				th {{'Tipo' | translate}}
+				th {{'Ubi' | translate}}
+				th {{'Dispon' | translate}}
+				th {{'Tel' | translate}}
+				//-th {{'empresa' | translate}}
+
+		tfoot
+			tr
+				th
+				th {{'name' | translate}}
+				th {{'Tipo' | translate}}
+				th {{'Ubi' | translate}}
+				th {{'Dispon' | translate}}
+				th {{'Tel' | translate}}
+				//-th {{'empresa' | translate}}
+		tbody
+			tr(ng-repeat="i in $ctrl.ListaBodegas")
+				td
+					a.button.is-success(ng-click="$ctrl.updBodega(i)")
+						i.fa.fa-pencil
+					a.button.is-warning(ui-sref="inventario({idBod:i.bod_id,tipo:i.bod_tipo,nameBod:i.bod_nombre})")
+						i.fa.fa-list-ol
+				td {{i.bod_nombre}}
+				td {{i.bod_tipo}}
+				td {{i.bod_ubicacion}}
+				td {{i.bod_disponible}}
+				td {{i.bod_telefono}}
+				//-td {{i.emp_nombre}}
+
+
+

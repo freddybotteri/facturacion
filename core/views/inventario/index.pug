@@ -1,0 +1,143 @@
+//-nav#top.nav.has-shadow(style="background-color:#2d3e63")
+menu(menutipe= "'datos'")
+section.section(ng-init="$ctrl.cargainventarios()")
+	.title Inventario
+	.title Bodega {{$ctrl.nameBod}}
+	form(name="invF")
+		//-label.label {{ 'cod' | translate }}
+			p.control
+				input.input(type='number', placeholder='Codigo', ng-model="$ctrl.data.inv_id", readonly ="true")
+		//-label.label {{ 'Bod' | translate }}
+			span.select.control.has-icon.has-icon-right
+				select.select(data-ng-model='$ctrl.data.bod_id',required, name='bod_id',ng-class="{ 'is-danger' : proF.bod_id.$error.required && !proF.$pristine }")
+					option(ng-repeat='bodInv in $ctrl.ListaBodegas',value='{{bodInv.bod_id}}',ng-selected="$ctrl.data.bod_id == bodInv.bod_id")
+							| {{bodInv.bod_nombre}}
+		button.button.is-primary.is-outlined(ng-click="$ctrl.activeModalTrans()") Transacción
+		button.button.is-primary.is-outlined(ng-if="$ctrl.tipo == 2"  ng-click="$ctrl.activeModalTransf()") Transferencia
+table.table
+		thead
+			tr
+				th {{'ProArti' | translate}}
+				th {{'SubCant' | translate}}
+				//-th {{'empresa' | translate}}
+
+		tfoot
+			tr
+				th {{'ProArti' | translate}}
+				th {{'SubCant' | translate}}
+				//-th {{'empresa' | translate}}
+		tbody
+			tr(ng-repeat="i in $ctrl.ListaInventarios")
+				td {{i.prod_nombre}}
+				td {{i.inv_cantidad}}
+#modalPro.modal(ng-class="{'is-active': $ctrl.modal == 'is-active'}")
+	.modal-background
+	.modal-content
+		.modal-card
+			.modal-card-body
+				.title Lista de productos.
+				table.table
+					thead
+						tr
+							th {{'name' | translate}}
+							th {{'SubCant' | translate}}
+					tfoot
+						tr
+							th {{'name' | translate}}
+							th {{'SubCant' | translate}}
+					tbody
+						tr(ng-repeat="i in $ctrl.ListaProductos")
+							td
+								p.control
+									input.input(type='text',ng-value="i.prod_nombre"   readonly ="true")
+									input.input(type='hidden',ng-model="i.prod_id" hidden="true")
+							td
+								p.control
+									input.input(type='number', placeholder='Cantidad', ng-model="i.inv_cantidad")
+			footer.modal-card-foot
+				a.button.is-success(ng-click="$ctrl.cerrarModal()") Cerrar
+				a.button.is-success(ng-click="$ctrl.btnGuardarProducto()") GUARDAR
+	button.modal-close(ng-click="$ctrl.cerrarModal()")
+//-transacciones
+#modaltransaccion.modal(ng-class="{'is-active': $ctrl.modalTrans == 'is-active'}")
+	.modal-background
+	.modal-content
+		.modal-card
+			.modal-card-body
+				form(name="tranForm")
+					.columns
+						.column
+							label.label {{'ListPro' | translate}}
+							p.control.has-addons
+								input.input.is-expanded(type='text' ng-model="$ctrl.productoFiltro" ng-change='$ctrl.filtrarProducto()')
+								a.button(ng-click="") ...
+								span.select.control.has-icon.has-icon-right
+									select(data-ng-model='$ctrl.prodSelect',ng-change="$ctrl.productoSeleccionado()",required, name='prod_id',ng-class="{ 'is-danger' : tranForm.prod_id.$error.required && !tranForm.$pristine }")
+										option(ng-if="prodInv.prod_nombre != null", ng-repeat='prodInv in $ctrl.productosFiltrados',value='{{prodInv.prod_id}}')
+												| {{prodInv.prod_nombre}}
+					.columns
+						.column.is-half
+							label.label {{'CantActual' | translate}}
+							p.control.has-addons
+								input.input(type='text' ng-model="$ctrl.cantSelect" readonly="true")
+						.column.is-6
+							label.label {{'CantidadT' | translate}}
+								p.control.has-addons
+									input.input(ng-class="{'is-success':!tranForm.cantNew.$error.required}",type='number' ng-change="$ctrl.verificarHaySuficiente()",ng-model="$ctrl.cantidadNew" name="cantNew" required)
+								span.help.is-danger(ng-show="tranForm.cantNew.$Ubity && tranForm.cantNew.$error.required") {{'CantidadT' | translate }} {{ 'controlRequired' | translate}}
+								span.help.is-danger(ng-show="!$ctrl.validarCantidad") {{'NoSuPro' | translate }}
+					.columns
+						.column.is-12
+							label.label {{'Descrip' | translate}}
+								p.control.has-addons
+									textarea.input(style="width:100%;height:150px;" ng-model="$ctrl.descripcion")
+
+			footer.modal-card-foot
+				a.button.is-success(ng-click="$ctrl.cerrarModalTrans()") Cerrar
+				a.button.is-success(ng-disabled='!tranForm.$valid || !$ctrl.validarCantidad',ng-click="$ctrl.btnGuardarTrans()") GUARDAR
+	button.modal-close(ng-click="$ctrl.cerrarModalTrans()")
+//-tranferencias
+#modaltransferencia.modal(ng-class="{'is-active': $ctrl.modalTransf == 'is-active'}")
+	.modal-background
+	.modal-content
+		.modal-card
+			.modal-card-body
+				form(name="tranfForm")
+					.columns
+						.column
+							label.label {{'ListBod' | translate}}
+							p.control.has-addons
+								input.input.is-expanded(type='text',ng-model='$ctrl.bodegaFiltro', ng-change='$ctrl.filtrarBodega()')
+								a.button(ng-click="") ...
+								span.select.control.has-icon.has-icon-right.is-fullwidth
+									select.select(data-ng-model='$ctrl.bodSelect',ng-change="",required, name='bod_id',ng-class="{ 'is-danger' : tranfForm.bod_id.$error.required && !tranfForm.$pristine }")
+										option(ng-if="bodList.bod_id != $ctrl.idBod && bodList.bod_nombre!= ''" ng-repeat='bodList in $ctrl.bodegaFiltrada',ng-click="$ctrl.bodegaSeleccionada(bodList.bod_nombre)",value='{{bodList.bod_id}}')
+												| {{bodList.bod_nombre}}
+					.columns
+						.column.is-half
+							label.label {{'proBodAct' | translate}}
+							span.select.control.has-icon.has-icon-right.is-fullwidth
+								select.select(data-ng-model='$ctrl.proBodSelect',ng-change="$ctrl.prodBodSeleccionado()",required, name='prod_id',ng-class="{ 'is-danger' : tranfForm.prod_id.$error.required && !tranfForm.$pristine }")
+									option(ng-if="prodInv.nombre != ''" ng-repeat='prodList in $ctrl.ListaInventarios',value='{{prodList.prod_id}}')
+											| {{prodList.prod_nombre}}
+						.column.is-auto
+							label.label {{'proBodSel' | translate}}
+							p.control.has-addons
+								input.input.is-expanded(type='text' ng-model="$ctrl.cantActualSelect" readonly)
+					.columns
+						.column.is-one-quarter
+							label.label {{'CantidadT' | translate}}
+							p.control.has-addons
+								input.input(ng-class="{'is-success':!tranfForm.cantNew.$error.required}",type='number' min="0" max="9999" ng-change="$ctrl.verificarHayProTranferir()",ng-model="$ctrl.cantidadTranfNew" name="cantTranfNew" required)
+							span.help.is-danger(ng-show="tranfForm.cantTranfNew.$Ubity && tranfForm.cantTranfNew.$error.required") {{'CantidadT' | translate }} {{ 'controlRequired' | translate}}
+							span.help.is-danger(ng-show="!$ctrl.validarCantidadTranf") {{'NoSuPro' | translate }}
+					.columns
+						.column.is-12
+							label.label {{'Descrip' | translate}}
+							p.control.has-addons
+								textarea.input(style="width:100%;height:150px;",ng-model="$ctrl.descripcionTranf")
+
+			footer.modal-card-foot
+				a.button.is-success(ng-click="$ctrl.cerrarModalTransf()") Cerrar
+				a.button.is-success(ng-disabled='!tranfForm.$valid || !$ctrl.validarCantidadTranf',ng-click="$ctrl.btnGuardadTranf()") GUARDAR
+	button.modal-close(ng-click="$ctrl.cerrarModalTransf()")

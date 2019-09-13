@@ -1,0 +1,67 @@
+//-nav#top.nav.has-shadow(style="background-color:#2d3e63")
+menu(menutipe= "'datos'")
+section.section(ng-init="$ctrl.cargapuntodeVenta()")
+	button.button.is-primary.is-outlined( ng-click="$ctrl.mostrarForm()") NUEVO
+	.title Punto de venta 	
+	form(name="pvF", ng-show='$ctrl.visible')
+		label.label {{ 'cod' | translate }}
+		p.control
+			input.input(type='number', placeholder='Codigo', ng-model="$ctrl.data.pv_id", readonly ="true")
+		label.label {{ 'name' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!pvF.pv_nombre.$error.required}", type='text',name="pv_nombre",placeholder='nombre',ng-model="$ctrl.data.pv_nombre", required)
+			i.fa.fa-check 
+			span.help.is-danger(ng-show="pvF.pv_nombre.$dirty && pvF.pv_nombre.$error.required") {{ 'name' | translate }} {{ 'controlRequired' | translate}}
+		label.label {{ 'Movil' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!pvF.pv_movil.$error.required}", type='text',name="pv_movil",placeholder='movil',ng-model="$ctrl.data.pv_movil", required)
+			i.fa.fa-check 
+			span.help.is-danger(ng-show="pvF.pv_movil.$dirty && pvF.pv_movil.$error.required") {{ 'Movil' | translate }} {{ 'controlRequired' | translate}}
+		//-label.label {{ 'empresa' | translate }}
+			span.select.control.has-icon.has-icon-right
+				select.select(data-ng-model='$ctrl.data.emp_id',required, name='emp_id',ng-class="{ 'is-danger' : pvF.emp_id.$error.required && !pvF.$pristine }")
+					option(ng-repeat='empresaN in $ctrl.ListaEmpresas',value='{{empresaN.emp_id}}',ng-selected="$ctrl.data.emp_id == empresaN.emp_id")
+							| {{empresaN.emp_nombre}}
+		label.label {{ 'corr' | translate }}
+		span.select.control.has-icon.has-icon-right
+			select.select(data-ng-model='$ctrl.data.corr_id',required, name='corr_id',ng-class="{ 'is-danger' : pvF.corr_id.$error.required && !pvF.$pristine }")
+				option(ng-repeat='corrN in $ctrl.ListaCorrelativos',value='{{corrN.corr_id}}',ng-selected="$ctrl.data.corr_id == corrN.corr_id")
+						| {{corrN.corr_cai}}
+		label.label Estado
+		p.control
+			label.radio
+				input(type='radio', name='pv_sts',ng-model="$ctrl.data.pv_sts" value='1')
+				|&nbsp; Activo
+			label.radio
+				input(type='radio', name='pv_sts',ng-model="$ctrl.data.pv_sts" value='0')
+				|&nbsp; Inactivo
+		p.control
+			button.button.is-primary(ng-click="$ctrl.btnAgregar()", ng-disabled='!pvF.$valid') GUARDAR  
+			button.button(ng-click="$ctrl.btnLimpiar(pvF)") Limpiar
+table.table
+		thead
+			tr
+				th
+				th {{'name' | translate}}
+				th {{'Movil' | translate}}
+				th {{'fechCre' | translate}}
+				th {{'corr' | translate}}
+				//-th {{'empresa' | translate}}
+		tfoot
+			tr
+				th
+				th {{'name' | translate}}
+				th {{'Movil' | translate}}
+				th {{'fechCre' | translate}}
+				th {{'corr' | translate}}
+				//-th {{'empresa' | translate}}
+		tbody
+			tr(ng-repeat="i in $ctrl.ListapuntodeVenta")
+				td
+					a.button.is-success(ng-click="$ctrl.updpuntodeVenta(i)")
+						i.fa.fa-pencil
+				td {{i.pv_nombre}}
+				td {{i.pv_movil}}
+				td {{i.pv_fechacre}}
+				td {{i.corr_sigval}}
+				//-td {{i.emp_nombre}}

@@ -1,0 +1,25 @@
+//-nav#top.nav.has-shadow(style="background-color:#2d3e63")
+menu(menutipe= "'datos'")
+section.section
+	.title Seleccione una ruta
+table.table
+		thead
+			tr
+				th
+				th {{'cod' | translate}}
+				th {{'name' | translate}}
+				th Vendedor
+		tfoot
+			tr
+				th
+				th {{'cod' | translate}}	
+				th {{'name' | translate}}
+				th Vendedor
+		tbody
+			tr(ng-repeat="i in $ctrl.ListaRutas")
+				td
+					a.button.is-success(ui-sref="detalleRuta({idRuta:i.rut_id})")
+						i.fa.fa-pencil
+				td {{i.rut_id}}
+				td {{i.rut_nombre}}
+				td {{i.ven_nombre}}

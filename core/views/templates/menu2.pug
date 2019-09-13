@@ -1,0 +1,30 @@
+//-.hero-head
+	.container
+	(style='background-color:#2d3e63; link:#FFFFFF; vlink=#ffffcc; alink=#ffffcc; width:100%;')
+	nav#top.nav
+.hero-head
+	header.nav
+		.container
+			nav#top.nav
+				span.nav-toggle
+					span( ng-repeat='x in $ctrl.data', href='\#{{x.tmenu_uri}}')
+					|  {{x.tmenu_text}}
+				.nav-right.nav-menu
+					a.nav-item.is-tab.is-info(ng-if="x.tmenu_text != 'Admin'", ng-repeat='x in $ctrl.data', href='\#{{x.tmenu_uri}}') {{x.tmenu_text}}
+					a.nav-item#logout() Salir( #{locals.nombre} )
+script.
+		$(function() {
+			$( "body" ).on("click", "#logout",function() {
+				$.post("/post/logout",{
+				})
+				.done(function(dato){
+					if(dato.tipo == "ok"){
+						window.location.href= "../login";
+					};
+				})
+				.fail(function(err){
+					console.log(err)
+				})
+			});
+
+		});

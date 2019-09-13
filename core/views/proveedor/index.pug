@@ -1,0 +1,65 @@
+//-nav#top.nav.has-shadow(style="background-color:#2d3e63")
+menu(menutipe= "'datos'")
+section.section(ng-init="$ctrl.cargaproveedores()")
+	button.button.is-primary.is-outlined( ng-click="$ctrl.mostrarForm()") NUEVO
+	.title Proveedor 	
+	form(name="pveF", ng-show='$ctrl.visible')
+		label.label {{ 'cod' | translate }}
+		p.control
+			input.input(type='number', placeholder='Codigo', ng-model="$ctrl.data.pve_id", readonly ="true" visible="false")
+		label.label {{ 'name' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!pveF.pve_nombre.$error.required}", type='text',name="pve_nombre",placeholder="{{ 'name' | translate }}",ng-model="$ctrl.data.pve_nombre", required)
+			i.fa.fa-check 
+			span.help.is-danger(ng-show="pveF.pve_nombre.$dirty && pveF.pve_nombre.$error.required") {{ 'name' | translate }} {{ 'controlRequired' | translate}}
+		label.label {{ 'Ubi' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!pveF.pve_ubicacion.$error.required}", type='text',name="pve_ubicacion",placeholder="{{ 'Ubi' | translate }}",ng-model="$ctrl.data.pve_ubicacion", required)
+			i.fa.fa-check 
+			span.help.is-danger(ng-show="pveF.pve_ubicacion.$dirty && pveF.pve_ubicacion.$error.required") {{ 'Ubi' | translate }} {{ 'controlRequired' | translate}}
+		//-label.label {{ 'Familia' | translate }}
+			span.select.control.has-icon.has-icon-right
+				select.select(data-ng-model='$ctrl.data.prod_familia',required, name='fam_id',ng-class="{ 'is-danger' : pveF.fam_id.$error.required && !pveF.$pristine }")
+					option(ng-repeat='famPro in $ctrl.ListaFamilia',value='{{famPro.fam_id}}',ng-selected="$ctrl.data.fam_id == famPro.fam_id")
+							| {{famPro.fam_nombre}}
+		label.label {{ 'Tel' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!pveF.telefono.$error.required}",type='text',name="telefono" ,placeholder="{{ 'Tel' | translate }}",ng-model="$ctrl.data.telefono" required)
+			span.help.is-danger(ng-show="pveF.telefono.$dirty && pveF.telefono.$error.required") {{ 'Tel' | translate }} {{ 'controlRequired' | translate}}
+		label.label Estado
+		//-p.control
+			label.radio
+				input(type='radio', name='prod_sts',ng-model="$ctrl.data.prod_sts" value='1')
+				|&nbsp; Activo
+			label.radio
+				input(type='radio', name='prod_sts',ng-model="$ctrl.data.prod_sts" value='0')
+				|&nbsp; Inactivo
+		selectorgrupo(tipe= "'proveedor'" salida="$ctrl.complementos" update="$ctrl.updateComplementos")
+		p.control
+			button.button.is-primary(ng-click="$ctrl.btnAgregar()", ng-disabled='!pveF.$valid') GUARDAR  
+			button.button(ng-click="$ctrl.btnLimpiar(pveF)") Limpiar
+table.table
+		thead
+			tr
+				th
+				th {{'name' | translate}}
+				th {{'Ubi' | translate}}
+				th {{'Tel' | translate}}
+
+		tfoot
+			tr
+				th
+				th {{'name' | translate}}
+				th {{'Ubi' | translate}}
+				th {{'Tel' | translate}}
+		tbody
+			tr(ng-repeat="i in $ctrl.Listaproveedores")
+				td
+					a.button.is-success(ng-click="$ctrl.updproveedor(i)")
+						i.fa.fa-pencil
+				td {{i.pve_nombre}}
+				td {{i.pve_ubicacion}}
+				td {{i.telefono}}
+
+
+

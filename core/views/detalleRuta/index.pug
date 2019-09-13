@@ -1,0 +1,223 @@
+//-nav#top.nav.has-shadow(style="background-color:#2d3e63")
+menu(menutipe= "'datos'")
+section.section(ng-init="$ctrl.cargadetalleRuta()")
+	button.button.is-primary.is-outlined( ng-click="$ctrl.mostrarForm()") NUEVO
+	.title Detalle de ruta
+	form(name="detRutF", ng-show='$ctrl.visible')
+		p.control
+			input.input(ng-show="false" type='number', placeholder='Codigo', ng-model="$ctrl.data.drut_id", readonly ="true")
+		.columns
+			.column.is-2
+				label.label {{ 'HoraPr' | translate }}
+				p.control.has-icon.has-icon-right
+					input.input(ng-class="{'is-success':!detRutF.drut_horapref.$error.required}", type='time',name="drut_horapref",placeholder="{{ 'HoraPr' | translate }}",ng-model="$ctrl.data.drut_horapref", required)
+					i.fa.fa-check 
+					span.help.is-danger(ng-show="detRutF.drut_horapref.$Ubity && detRutF.drut_horapref.$error.required") {{ 'HoraPr' | translate }} {{ 'controlRequired' | translate}}
+			.column.is-auto
+				label.label Cliente
+				p.control.has-addons
+					input.input(type='text', ng-model="$ctrl.CliSel"  readonly ="true")
+					a.button.is-success(data-target='#modal', ng-click="$ctrl.activeModal()")
+						i.fa.fa-male
+		.columns
+			.column.is-auto
+				label.label {{ 'Obser' | translate }}
+				p.control.has-icon.has-icon-right
+					input.input(ng-class="{'is-success':!detRutF.drut_observacion.$error.required}", type='text',name="drut_observacion",placeholder="{{ 'Obser' | translate }}",ng-model="$ctrl.data.drut_observacion", required)
+					i.fa.fa-check 
+					span.help.is-danger(ng-show="detRutF.drut_observacion.$Ubity && detRutF.drut_observacion.$error.required") {{ 'name' | translate }} {{ 'controlRequired' | translate}}
+		.notification
+			.columns
+				.column.auto
+					label.label {{'DiasAv' | translate}}
+				.column.auto
+					p.control
+					label.radio
+						input(type='checkbox',ng-model="$ctrl.dias.lunes" ,ng-checked="{{$ctrl.dias.lunes == 1}}", ng-click="$ctrl.elegirDia(lunes)")
+						|&nbsp; LUN
+				.column.auto
+					p.control
+					label.radio
+						input(type='checkbox',ng-model="$ctrl.dias.martes" ,ng-checked="{{$ctrl.dias.martes == true}}", ng-click="$ctrl.elegirDia(martes)")
+						|&nbsp; MAR
+				.column.auto
+					p.control
+					label.radio
+						input(type='checkbox',ng-model="$ctrl.dias.miercoles" ,ng-checked="{{$ctrl.dias.miercoles == true}}", ng-click="$ctrl.elegirDia(miercoles)")
+						|&nbsp; MIR
+				.column.auto
+					p.control
+					label.radio
+						input(type='checkbox',ng-model="$ctrl.dias.jueves" ,ng-checked="{{$ctrl.dias.jueves == true}}", ng-click="$ctrl.elegirDia(jueves)")
+						|&nbsp; JUV
+				.column.auto
+					p.control
+					label.radio
+						input(type='checkbox',ng-model="$ctrl.dias.viernes" ,ng-checked="{{$ctrl.dias.viernes == true}}", ng-click="$ctrl.elegirDia(viernes)")
+						|&nbsp; VIR
+				.column.auto
+					p.control
+					label.radio
+						input(type='checkbox',ng-model="$ctrl.dias.sabado" ,ng-checked="{{$ctrl.dias.sabado == true}}", ng-click="$ctrl.elegirDia(sabado)")
+						|&nbsp;SAD
+				.column.auto
+					p.control
+					label.radio
+						input(type='checkbox',ng-model="$ctrl.dias.domingo" ,ng-checked="{{$ctrl.dias.domingo == true}}", ng-click="$ctrl.elegirDia(domingo)")
+						|&nbsp; DOM
+				
+			a.button.is-warning(ng-click="$ctrl.elegirDia('todo')")
+				i.fa.fa-check-circle
+			a.button.is-warning(ng-click="$ctrl.elegirDia('ninguno')")
+				i.fa.fa-circle-thin
+		p.control
+			button.button.is-primary(ng-click="$ctrl.btnAgregar()", ng-disabled='!detRutF.$valid') GUARDAR  
+			button.button(ng-click="$ctrl.btnLimpiar(detRutF)") Limpiar
+hr
+.title Clientes asignados a la ruta
+.columns
+	.column.is-2
+		a.button.is-success(data-target='#modalMap', ng-click="$ctrl.activeModalMap()") Clientes en mapa.
+	.column.auto
+		a.button.is-success(data-target='#modalMapGeocerca', ng-click="$ctrl.activeModalMapGeocerca()") Dibujar geocerca.
+table.table
+		thead
+			tr
+				th
+				th {{'Cli' | translate}}
+				th {{'Obser' | translate}}
+		tfoot
+			tr
+				th
+				th {{'Cli' | translate}}
+				th {{'Obser' | translate}}
+		tbody
+			tr(ng-repeat="i in $ctrl.ListadetalleRutas  | filter:{drut_id:'!!'} track by $index")
+				td
+					a.button.is-success(ng-click="$ctrl.upddetalleRuta(i)")
+						i.fa.fa-pencil
+					a.button.is-danger(ng-click="$ctrl.eliminarClientedeRuta(i.cli_id)")
+						i.fa.fa-trash
+				td {{i.cli_nombre}}
+				td {{i.drut_observacion}}
+#modalMap.modal(ng-class="{'is-active': $ctrl.modalMap == 'is-active'}")
+	.modal-background
+	.modal-content.listaGeo
+		.modal-card.listaGeo
+			.modal-card-body.listaGeo
+				iframe#mapFrameMap(src='/mapaCliente', frameborder='0' style="display: block; width: 100%; height: 100%;")
+			footer.modal-card-foot
+				a.button.is-success(ng-click="$ctrl.cerrarModalMap()") Cerrar
+	button.modal-close(ng-click="$ctrl.cerrarModalMap()")
+
+#modalMapGeocerca.modal(ng-class="{'is-active': $ctrl.modalMapGeocerca == 'is-active'}")
+	.modal-background
+	.modal-content.listaGeo
+		.modal-card.listaGeo
+			.modal-card-body.listaGeo
+				iframe#mapFrameGeocerca(src='/mapaCliente', frameborder='0' style="display: block; width: 100%; height: 100%;")
+			footer.modal-card-foot
+				a.button.is-success(ng-click="$ctrl.cerrarModalMapGeocerca()") Cerrar
+				a.button.is-success(ng-click="$ctrl.LimpiarGeo()") Limpiar
+	button.modal-close(ng-click="$ctrl.cerrarModalMapGeocerca()")
+
+style(type='text/css').
+			.listaGeo {width: 1000px; height: 1000px; }
+#modalListaGeocerca.modal(ng-class="{'is-active': $ctrl.modalListaGeocerca == 'is-active'}")
+	.modal-background
+	.modal-content.listaGeo
+		.modal-card.listaGeo
+			.modal-card-body.listaGeo
+				.title Lista clientes
+				table.table
+					tbody
+						tr(ng-repeat="LisGeo in $ctrl.uniqueArray  | filter:{cli_id:'!!'} track by $index")
+							td
+								a.button.is-danger(ng-click="$ctrl.deleteList(LisGeo)")
+									i.fa.fa-trash
+							td.column.is-4
+								p.control.has-addons
+									input.input(type='text',ng-value="LisGeo.cli_id" ng-model="LisGeo.cli_id"  readonly ="true")
+							td.column.is-auto
+								p.control.has-addons
+									input.input(type='text',ng-value="LisGeo.cli_nombre" ng-model="LisGeo.cli_nombre" readonly ="true")
+							td
+								.notification
+									.columns
+										.column.auto
+											p.control
+											label.radio
+												input(type='checkbox',ng-model="LisGeo.lunes" ,ng-checked="{{LisGeo.lunes == 1}}", ng-click="$ctrl.elegirDiaLista(lunes,LisGeo)")
+												|&nbsp; LUN
+										.column.auto
+											p.control
+											label.radio
+												input(type='checkbox',ng-model="LisGeo.martes" ,ng-checked="{{LisGeo.martes == true}}", ng-click="$ctrl.elegirDiaLista(martes,LisGeo)")
+												|&nbsp; MAR
+										.column.auto
+											p.control
+											label.radio
+												input(type='checkbox',ng-model="LisGeo.miercoles" ,ng-checked="{{LisGeo.miercoles == true}}", ng-click="$ctrl.elegirDiaLista(miercoles,LisGeo)")
+												|&nbsp; MIR
+										.column.auto
+											p.control
+											label.radio
+												input(type='checkbox',ng-model="LisGeo.jueves" ,ng-checked="{{LisGeo.jueves == true}}", ng-click="$ctrl.elegirDiaLista(jueves,LisGeo)")
+												|&nbsp; JUV
+										.column.auto
+											p.control
+											label.radio
+												input(type='checkbox',ng-model="LisGeo.viernes" ,ng-checked="{{LisGeo.viernes == true}}", ng-click="$ctrl.elegirDiaLista(viernes,LisGeo)")
+												|&nbsp; VIR
+										.column.auto
+											p.control
+											label.radio
+												input(type='checkbox',ng-model="LisGeo.sabado" ,ng-checked="{{LisGeo.sabado == true}}", ng-click="$ctrl.elegirDiaLista(sabado,LisGeo)")
+												|&nbsp;SAD
+										.column.auto
+											p.control
+											label.radio
+												input(type='checkbox',ng-model="LisGeo.domingo" ,ng-checked="{{LisGeo.domingo == true}}", ng-click="$ctrl.elegirDiaLista(domingo,LisGeo)")
+												|&nbsp; DOM
+							td.column.is-12
+								p.control.has-icon.has-icon-right
+									input.input(ng-class="{'is-success':!detRutF.drut_horapref.$error.required}", type='time',name="drut_horapref",placeholder="{{ 'HoraPr' | translate }}",ng-model="LisGeo.drut_horapref", required)
+									i.fa.fa-check 
+									span.help.is-danger(ng-show="detRutF.drut_horapref.$Ubity && detRutF.drut_horapref.$error.required") {{ 'HoraPr' | translate }} {{ 'controlRequired' | translate}}
+							td.column.is-auto
+								p.control.has-icon.has-icon-right
+									input.input(ng-class="{'is-success':!detRutGeo.drut_observacion.$error.required}", type='text',name="drut_observacion",placeholder="{{ 'Obser' | translate }}",ng-model="LisGeo.drut_observacion", required)
+									i.fa.fa-check 
+									span.help.is-danger(ng-show="detRutGeo.drut_observacion.$Ubity && detRutGeo.drut_observacion.$error.required") {{ 'name' | translate }} {{ 'controlRequired' | translate}}					
+			footer.modal-card-foot
+				a.button.is-success(ng-click="$ctrl.cerrarmodalListaGeocerca()") Cerrar
+				a.button.is-success(ng-click="$ctrl.btnGuardarLista()") GUARDAR
+	button.modal-close(ng-click="$ctrl.cerrarmodalListaGeocerca()")
+
+#modal.modal(ng-class="{'is-active': $ctrl.modal == 'is-active'}")
+	.modal-background
+	.modal-content
+		.modal-card
+			.modal-card-body
+				section.section
+					.title Escoja un cliente 
+					input.input(type='text', ng-model="$ctrl.textCli"  placeholder="Buscar" ng-change="$ctrl.busquedaCli()")
+					table.table
+							thead
+								tr
+									th
+									th {{ 'Nombre' | translate }}
+							tfoot
+								tr
+									th
+									th {{ 'Nombre' | translate }}
+							tbody
+								tr(ng-repeat="LisCli in $ctrl.ListaClientes")
+									td(ng-if="LisCli.cli_id == $ctrl.data.cli_id")
+									td(ng-if="LisCli.cli_id != $ctrl.data.cli_id")
+										a.button.is-success.is-active(ng-click="$ctrl.seleccionarCli(LisCli.cli_id,LisCli.cli_nombre)")
+											i.fa.fa-pencil
+									td {{LisCli.cli_nombre}}
+			footer.modal-card-foot
+				a.button.is-success(ng-click="$ctrl.cerrarModal()") Cerrar
+	button.modal-close(ng-click="$ctrl.cerrarModal()")

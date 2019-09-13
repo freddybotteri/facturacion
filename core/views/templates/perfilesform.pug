@@ -1,0 +1,45 @@
+section.section(ng-init="$ctrl.CargaPerfiles()")
+	button.button.is-primary.is-outlined( ng-click="$ctrl.mostrarForm()") NUEVO
+	.title Perfiles 
+	form(name="mainF", ng-show='$ctrl.visible')
+		label.label {{ 'cod' | translate }}
+		p.control
+			input.input(type='number', placeholder='Codigo', ng-model="$ctrl.data.tperfil_id", readonly ="true")
+		label.label {{ 'name' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!mainF.tperfil_name.$error.required}", type='text',name="tperfil_name", placeholder='Perfil',ng-model="$ctrl.data.tperfil_name", required)
+			i.fa.fa-check 
+			span.help.is-danger(ng-show="mainF.tperfil_name.$dirty && mainF.tperfil_name.$error.required") {{ 'name' | translate }} {{ 'controlRequired' | translate}}
+		label.label {{ 'descrip' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!mainF.tperfil_descricion.$error.required}", type='text', name="tperfil_descricion", placeholder='Descripcion', ng-model="$ctrl.data.tperfil_descricion", required)
+			span.help.is-danger(ng-show="mainF.tperfil_descricion.$dirty && mainF.tperfil_descricion.$error.required") {{ 'descrip' | translate }} {{ 'controlRequired' | translate}}
+		label.label Estado
+		p.control
+			label.radio
+				input(type='radio', name='tperfil_sts',ng-model="$ctrl.data.tperfil_sts" value='1')
+				|&nbsp; Activo
+			label.radio
+				input(type='radio', name='tperfil_sts',ng-model="$ctrl.data.tperfil_sts" value='0')
+				|&nbsp; Inactivo
+		p.control
+			button.button.is-primary(ng-click="$ctrl.btnAgregar($ctrl.data)", ng-disabled='!mainF.$valid') GUARDAR  
+			button.button(ng-click="$ctrl.btnLimpiar(mainF)") Limpiar
+table.table
+		thead
+			tr
+				th
+				th Nombre
+				th Descripcion
+		tfoot
+			tr
+				th
+				th Nombre
+				th Descripcion
+		tbody
+			tr(ng-repeat="i in $ctrl.ListaPerfiles")
+				td
+					a.button.is-success(ng-click="$ctrl.updPerfil(i)")
+						i.fa.fa-pencil
+				td {{i.tperfil_name}}
+				td {{i.tperfil_descricion}}

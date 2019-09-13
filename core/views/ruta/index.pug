@@ -1,0 +1,66 @@
+//-nav#top.nav.has-shadow(style="background-color:#2d3e63")
+menu(menutipe= "'datos'")
+section.section(ng-init="$ctrl.cargaRutas()")
+	button.button.is-primary.is-outlined( ng-click="$ctrl.mostrarForm()") NUEVO
+	.title Ruta 	
+	form(name="rutF", ng-show='$ctrl.visible')
+		label.label {{ 'cod' | translate }}
+		p.control
+			input.input(type='number', placeholder='Codigo', ng-model="$ctrl.data.rut_id", readonly ="true")
+		label.label {{ 'name' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!rutF.rut_nombre.$error.required}", type='text',name="rut_nombre",placeholder="{{ 'name' | translate }}",ng-model="$ctrl.data.rut_nombre", required)
+			i.fa.fa-check 
+			span.help.is-danger(ng-show="rutF.rut_nombre.$Ubity && rutF.rut_nombre.$error.required") {{ 'name' | translate }} {{ 'controlRequired' | translate}}
+		label.label {{ 'Vehic' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!rutF.rut_vehi.$error.required}", type='text',name="rut_vehi",placeholder="{{ 'Vehic' | translate }}",ng-model="$ctrl.data.rut_vehi", required)
+			i.fa.fa-check 
+			span.help.is-danger(ng-show="rutF.rut_vehi.$Ubity && rutF.rut_vehi.$error.required") {{ 'Vehic' | translate }} {{ 'controlRequired' | translate}}
+		
+		//-label.label {{ 'empresa' | translate }}
+			span.select.control.has-icon.has-icon-right
+				select.select(data-ng-model='$ctrl.data.emp_id',required, name='emp_id',ng-class="{ 'is-danger' : rutF.emp_id.$error.required && !rutF.$pristine }")
+					option(ng-repeat='empB in $ctrl.ListaEmpresas',value='{{empB.emp_id}}',ng-selected="$ctrl.data.emp_id == empB.emp_id")
+							| {{empB.emp_nombre}}
+		label.label {{ 'Bod' | translate }}
+		span.select.control.has-icon.has-icon-right
+			select.select(data-ng-model='$ctrl.data.bod_id',required, name='bod_id',ng-class="{ 'is-danger' : rutF.bod_id.$error.required && !rutF.$pristine }")
+				option(ng-repeat='bodR in $ctrl.ListaBodegas',value='{{bodR.bod_id}}',ng-selected="$ctrl.data.bod_id == bodR.bod_id")
+						| {{bodR.bod_nombre}}
+		label.label {{ 'Ven' | translate }}
+		span.select.control.has-icon.has-icon-right
+			select.select(data-ng-model='$ctrl.data.ven_id',required, name='ven_id',ng-class="{ 'is-danger' : rutF.ven_id.$error.required && !rutF.$pristine }")
+				option(ng-repeat='venR in $ctrl.ListaVendedores',value='{{venR.ven_id}}',ng-selected="$ctrl.data.ven_id == venR.ven_id")
+						| {{venR.ven_nombre}}
+		p.control
+			button.button.is-primary(ng-click="$ctrl.btnAgregar()", ng-disabled='!rutF.$valid') GUARDAR  
+			button.button(ng-click="$ctrl.btnLimpiar(rutF)") Limpiar
+table.table
+		thead
+			tr
+				th
+				th {{'name' | translate}}
+				th {{'Vehic' | translate}}
+				//-th {{'empresa' | translate}}
+				th {{'Ven' | translate}}
+				th {{'Bod' | translate}}
+
+		tfoot
+			tr
+				th
+				th {{'name' | translate}}
+				th {{'Vehic' | translate}}
+				//-th {{'empresa' | translate}}
+				th {{'Ven' | translate}}
+				th {{'Bod' | translate}}
+		tbody
+			tr(ng-repeat="i in $ctrl.ListaRutas")
+				td
+					a.button.is-success(ng-click="$ctrl.updRuta(i)")
+						i.fa.fa-pencil
+				td {{i.rut_nombre}}
+				td {{i.rut_vehi}}
+				//-td {{i.emp_nombre}}
+				td {{i.ven_nombre}}
+				td {{i.bod_nombre}}

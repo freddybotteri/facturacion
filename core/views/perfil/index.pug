@@ -1,0 +1,64 @@
+.box(ng-init="granCtrl.CargaGranjas()")
+	form(name='granjaForm')
+		.content
+			label.label(for='nombre') Nombre
+			p.control
+				input.input(type='text', placeholder='Nombre de la granja', required, name='gran_nombre', ng-model='granCtrl.data.gran_nombre' ng-class="{ 'is-danger' : granjaForm.gran_nombre.$error.required && !granjaForm.$pristine }")
+			span(ng-show='!granjaForm.$pristine && granjaForm.gran_nombre.$error.required' ng-class="{ 'help is-danger' : granjaForm.gran_nombre.$error.required && !granjaForm.$pristine }") Nombre requerido
+			label.label(for='direccion') Direccion 
+			p.control
+				input.input(type='text', required, name='gran_direccion', data-ng-model='granCtrl.data.gran_direccion' ng-class="{ 'is-danger' : granjaForm.gran_direccion.$error.required && !granjaForm.$pristine }")
+			span(ng-show='!granjaForm.$pristine && granjaForm.gran_direccion.$error.required' ng-class="{ 'help is-danger' : granjaForm.gran_direccion.$error.required && !granjaForm.$pristine }") Razon requerida
+			label.label(for='ubicacion') Ubicacion
+			p.control
+				input.input(type='text', name='gran_ubicacion', data-ng-model='granCtrl.data.gran_ubicacion' )
+			label.label(for='contacto') Contacto
+			p.control
+				input.input(type='text', name='gran_contacto', data-ng-model='granCtrl.data.gran_contacto')
+			label.label(for='telefono') Telefono
+			p.control
+				input.input(type='text', name='gran_telefono', data-ng-model='granCtrl.data.gran_telefono')
+			label.label
+				strong  Escoja una empresa.
+			span.select.control
+				select.select(data-ng-model='granCtrl.data.emp_id',required, name='emp_id' ng-class="{ 'is-danger' : granjaForm.emp_id.$error.required && !granjaForm.$pristine }")
+					option(ng-repeat='operator in granCtrl.ListaEmpresas', value='{{operator.emp_id}}')
+						| {{operator.emp_nombre}}
+		input.button.is-primary(type='submit', ng-click='granCtrl.btnAgregar(granCtrl.data)' , ng-disabled='!granjaForm.$valid' value="GUARDAR")
+		a.button.is-warning(ng-click='granCtrl.btnLimpiar()') LIMPIAR
+table.table
+		thead
+			tr
+				th
+				th Nombre
+				th Direccion
+				th Ubicacion
+				th Contacto
+				th Telefono
+				th Empresa
+		tfoot
+			tr
+				th
+				th Nombre
+				th Direccion
+				th Ubicacion
+				th Contacto
+				th Telefono
+				th granja
+		tbody
+			tr(ng-repeat="i in granCtrl.ListaGranja")
+				td
+					a.button.is-danger
+						i.fa.fa-trash
+					a.button.is-success
+						i.fa.fa-pencil
+				td {{i.gran_nombre}}
+				td {{i.gran_direccion}}
+				td {{i.gran_ubicacion}}
+				td {{i.gran_contacto}}
+				td {{i.gran_telefono}}
+				td {{i.emp_id}}
+				td {{i.emp_nombre}}
+			
+				
+				

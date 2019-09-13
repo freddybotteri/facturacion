@@ -1,0 +1,32 @@
+.box
+	section.section
+		h1 Seleccione complementos {{this.update}}
+	table.table
+			thead
+				tr
+					th
+					th {{'name' | translate}}
+			tbody
+				tr(ng-repeat="i in $ctrl.listaGrupos")
+					td
+						a.button(ng-class="i.ya == 1 ? 'is-primary' : ''" ng-click="$ctrl.activeModal(i.gru_id)") ...
+					td {{i.gru_descrip}}
+					td(ng-if="")
+#modal.modal(ng-class="{'is-active': $ctrl.modal == 'is-active'}")
+	.modal-background
+	.modal-content.listaGeo
+		.modal-card.listaGeo
+			.modal-card-body.listaGeo
+					table.table
+						thead
+							tr
+								th
+								th {{'gruDe' | translate}}
+						tbody
+							tr(ng-repeat="i in $ctrl.listaopcionesGrupos")
+								td
+									a.button(ng-class="i.ya == 1 ? 'is-primary' : ''" ng-click="$ctrl.escogerOpcion(i.ogru_id)") ...
+								td {{i.ogru_descrip}}
+			footer.modal-card-foot
+				a.button.is-success(ng-click="$ctrl.cerrarModal()") Cerrar
+	button.modal-close(ng-click="$ctrl.cerrarModal()")

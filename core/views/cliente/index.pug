@@ -1,0 +1,101 @@
+//-nav#top.nav.has-shadow(style="background-color:#2d3e63")
+menu(menutipe= "'datos'")
+section.section(ng-init="$ctrl.cargaClientes()")
+	button.button.is-primary.is-outlined( ng-click="$ctrl.mostrarForm()") NUEVO
+	.title Cliente 	
+	form(name="cliF", ng-show='$ctrl.visible')
+		label.label {{ 'cod' | translate }}
+		p.control
+			input.input(type='number', placeholder='Codigo', ng-model="$ctrl.data.cli_id", readonly ="true")
+		label.label {{ 'name' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!cliF.cli_nombre.$error.required}", type='text',name="cli_nombre",placeholder="{{ 'name' | translate }}",ng-model="$ctrl.data.cli_nombre", required)
+			i.fa.fa-check 
+			span.help.is-danger(ng-show="cliF.cli_nombre.$dirty && cliF.cli_nombre.$error.required") {{ 'name' | translate }} {{ 'controlRequired' | translate}}
+		label.label {{ 'codCli' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!cliF.cli_codigo.$error.required}", type='text',name="cli_codigo",placeholder="{{ 'codCli' | translate }}",ng-model="$ctrl.data.cli_codigo", required)
+			i.fa.fa-check 
+			span.help.is-danger(ng-show="cliF.cli_codigo.$dirty && cliF.cli_codigo.$error.required") {{ 'codCli' | translate }} {{ 'controlRequired' | translate}}
+		label.label {{ 'Dir' | translate }}
+		p.control.has-icon.has-icon-right
+			textarea.input(ng-class="{'is-success':!cliF.cli_direccion.$error.required}", type='text',name="cli_direccion",rows="5",cols="40",style="height:150px;" ,placeholder="{{ 'Dir' | translate }}",ng-model="$ctrl.data.cli_direccion", required)
+			i.fa.fa-check 
+			span.help.is-danger(ng-show="cliF.cli_direccion.$dirty && cliF.cli_direccion.$error.required") {{ 'Dir' | translate }} {{ 'controlRequired' | translate}}
+		label.label {{ 'Tel' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!cliF.cli_tel.$error.required}", type='text',name="cli_tel",placeholder="{{ 'Tel' | translate }}",ng-model="$ctrl.data.cli_tel", required)
+			i.fa.fa-check 
+			span.help.is-danger(ng-show="cliF.cli_tel.$dirty && cliF.cli_tel.$error.required") {{ 'Tel' | translate }} {{ 'controlRequired' | translate}}
+		label.label {{ 'Zona' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!cliF.cli_zona.$error.required}", type='text',name="cli_zona",placeholder="{{ 'Zona' | translate }}",ng-model="$ctrl.data.cli_zona", required)
+			i.fa.fa-check 
+			span.help.is-danger(ng-show="cliF.cli_zona.$dirty && cliF.cli_zona.$error.required") {{ 'Zona' | translate }} {{ 'controlRequired' | translate}}
+		label.label {{ 'RTN' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!cliF.cli_rtn.$error.required}", type='text',name="cli_rtn",placeholder="{{ 'RTN' | translate }}",ng-model="$ctrl.data.cli_rtn", required)
+			i.fa.fa-check 
+			span.help.is-danger(ng-show="cliF.cli_rtn.$dirty && cliF.cli_rtn.$error.required") {{ 'RTN' | translate }} {{ 'controlRequired' | translate}}
+		//-label.label {{ 'Ruta' | translate }}
+			span.select.control.has-icon.has-icon-right
+			select.select.is-medium(data-ng-model='$ctrl.data.rut_id',required, name='rut_id',ng-class="{ 'is-danger' : cliF.rut_id.$error.required && !cliF.$pristine }")
+				option(value="" ng-disabled="true" ng-selected="true") Escoja una ruta
+				option(ng-repeat='rutaN in $ctrl.ListaRutas',value='{{rutaN.rut_id}}',ng-selected="$ctrl.data.rut_id == rutaN.rut_id")
+						| {{rutaN.rut_nombre}}
+		p.control
+			a.button.is-primary.is-large.modal-button(data-target='#modal', ng-click="$ctrl.activeModal()") MAPA
+		label.label Estado
+		p.control
+			label.radio
+				input(type='radio', name='cli_sts',ng-model="$ctrl.data.cli_sts" value='1')
+				|&nbsp; Activo
+			label.radio
+				input(type='radio', name='cli_sts',ng-model="$ctrl.data.cli_sts" value='0')
+				|&nbsp; Inactivo
+		p.control
+			button.button.is-primary(ng-click="$ctrl.btnAgregar()", ng-disabled='!cliF.$valid') GUARDAR  
+			button.button(ng-click="$ctrl.btnLimpiar(cliF)") Limpiar
+style(type='text/css').
+			.listaGeo {width: 1000px; height: 1000px; }
+#modal.modal(ng-class="{'is-active': $ctrl.modal == 'is-active'}")
+	.modal-background
+	.modal-content.listaGeo
+		.modal-card.listaGeo
+			.modal-card-body.listaGeo
+				iframe#mapFrame(src='/mapaCliente', frameborder='0' style="display: block; width: 100%; height: 100%;")
+			footer.modal-card-foot
+				a.button.is-success(ng-click="$ctrl.cerrarModal()") Cerrar
+	button.modal-close(ng-click="$ctrl.cerrarModal()")
+table.table
+		thead
+			tr
+				th
+				th {{'name' | translate}}
+				th {{'codCli' | translate}}
+				th {{'Dir' | translate}}
+				th {{'Tel' | translate}}
+				th {{'Zona' | translate}}
+				th {{'RTN' | translate}}
+		tfoot
+			tr
+				th
+				th {{'name' | translate}}
+				th {{'codCli' | translate}}
+				th {{'Dir' | translate}}
+				th {{'Tel' | translate}}
+				th {{'Zona' | translate}}
+				th {{'RTN' | translate}}
+		tbody
+			tr(ng-repeat="i in $ctrl.ListarClientes")
+				td
+					a.button.is-success(ng-click="$ctrl.updCliente(i)")
+						i.fa.fa-pencil
+				td {{i.cli_nombre}}
+				td {{i.cli_codigo}}
+				td {{i.cli_direccion}}
+				td {{i.cli_tel}}
+				td {{i.cli_zona}}
+				td {{i.cli_rtn}}
+
+

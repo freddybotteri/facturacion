@@ -1,0 +1,94 @@
+//-nav#top.nav.has-shadow(style="background-color:#2d3e63")
+menu(menutipe= "'datos'")
+section.section(ng-init="$ctrl.cargaProductos()")
+	button.button.is-primary.is-outlined( ng-click="$ctrl.mostrarForm()") NUEVO
+	.title Producto 	
+	form(name="proF", ng-show='$ctrl.visible')
+		label.label {{ 'cod' | translate }}
+		p.control
+			input.input(type='number', placeholder='Codigo', ng-model="$ctrl.data.prod_id", readonly ="true")
+		label.label {{ 'name' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!proF.prod_nombre.$error.required}", type='text',name="prod_nombre",placeholder="{{ 'name' | translate }}",ng-model="$ctrl.data.prod_nombre", required)
+			i.fa.fa-check 
+			span.help.is-danger(ng-show="proF.prod_nombre.$dirty && proF.prod_nombre.$error.required") {{ 'name' | translate }} {{ 'controlRequired' | translate}}
+		//- label.label {{ 'Familia' | translate }}
+			p.control.has-icon.has-icon-right
+				input.input(ng-class="{'is-success':!proF.prod_familia.$error.required}", type='text',name="prod_familia",placeholder="{{ 'Unid' | translate }}",ng-model="$ctrl.data.prod_familia", required)
+				i.fa.fa-check 
+				span.help.is-danger(ng-show="proF.prod_familia.$dirty && proF.prod_familia.$error.required") {{ 'Unid' | translate }} {{ 'controlRequired' | translate}}
+		label.label {{ 'Familia' | translate }}
+		span.select.control.has-icon.has-icon-right
+			select.select(data-ng-model='$ctrl.data.prod_familia',required, name='fam_id',ng-class="{ 'is-danger' : proF.fam_id.$error.required && !proF.$pristine }")
+				option(ng-repeat='famPro in $ctrl.ListaFamilia',value='{{famPro.fam_id}}',ng-selected="$ctrl.data.fam_id == famPro.fam_id")
+						| {{famPro.fam_nombre}}
+
+
+
+
+
+
+		//- label.label {{ 'sudProd' | translate }}
+			p.control.has-icon.has-icon-right
+				input.input(ng-class="{'is-success':!proF.prod_subproducto.$error.required}",type='number',name="prod_subproducto" ,placeholder="{{ 'sudProd' | translate }}",ng-model="$ctrl.data.prod_subproducto" required)
+				span.help.is-danger(ng-show="proF.prod_subproducto.$dirty && proF.prod_subproducto.$error.required") {{ 'sudProd' | translate }} {{ 'controlRequired' | translate}}
+
+		label.label {{ 'sudProd' | translate }}
+		span.select.control.has-icon.has-icon-right
+			select.select(data-ng-model='$ctrl.data.prod_subproducto',required, name='prod_subproducto',ng-class="{ 'is-danger' : proF.prod_subproducto.$error.required && !proF.$pristine }")
+				option(ng-repeat='proPl in $ctrl.ListaProductos',value='{{proPl.prod_id}}')
+						| {{proPl.prod_nombre}}
+
+
+
+
+
+		label.label {{ 'SubCant' | translate }}
+		p.control.has-icon.has-icon-right
+			input.input(ng-class="{'is-success':!proF.prod_subcant.$error.required}" type='number',name="prod_subcant",placeholder="{{ 'SubCant' | translate }}",ng-model="$ctrl.data.prod_subcant" required)
+			span.help.is-danger(ng-show="proF.prod_subcant.$dirty && proF.prod_subcant.$error.required") {{ 'SubCant' | translate }} {{ 'controlRequired' | translate}}
+		label.label Imp.
+		p.control
+			label.radio
+				input(type='radio', name='prod_aplicaImp',ng-model="$ctrl.data.prod_aplicaImp" value='1')
+				|&nbsp; Si
+			label.radio
+				input(type='radio', name='prod_aplicaImp',ng-model="$ctrl.data.prod_aplicaImp" value='0')
+				|&nbsp; No
+		label.label Estado
+		p.control
+			label.radio
+				input(type='radio', name='prod_sts',ng-model="$ctrl.data.prod_sts" value='1')
+				|&nbsp; Activo
+			label.radio
+				input(type='radio', name='prod_sts',ng-model="$ctrl.data.prod_sts" value='0')
+				|&nbsp; Inactivo
+		selectorgrupo(tipe= "'producto'" salida="$ctrl.complementos" update="$ctrl.updateComplementos")
+		p.control
+			button.button.is-primary(ng-click="$ctrl.btnAgregar()", ng-disabled='!proF.$valid') GUARDAR  
+			button.button(ng-click="$ctrl.btnLimpiar(proF)") Limpiar
+table.table
+		thead
+			tr
+				th
+				th {{'name' | translate}}
+				th {{'SubCant' | translate}}
+				//-th {{'empresa' | translate}}
+
+		tfoot
+			tr
+				th
+				th {{'name' | translate}}
+				th {{'SubCant' | translate}}
+				//-th {{'empresa' | translate}}
+		tbody
+			tr(ng-repeat="i in $ctrl.ListaProductos")
+				td
+					a.button.is-success(ng-click="$ctrl.updProducto(i)")
+						i.fa.fa-pencil
+				td {{i.prod_nombre}}
+				td {{i.prod_subcant}}
+				//-td {{i.emp_nombre}}
+
+
+

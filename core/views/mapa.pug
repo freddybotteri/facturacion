@@ -1,0 +1,26 @@
+doctype html
+html(lang="en" data-ng-app="testApp")
+	head
+		meta(charset='utf-8')
+		//- meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1')
+		meta(name='keywords', content='BigSolutions, Catelsa, NOC, ServiceDesk, BigDesk')
+		title BigDesk@/Catelsa
+		style(type='text/css').
+			.angular-google-map-container { display: block; width: 100%; height: 550px; }
+	body( id="map" ng-controller="MainCtrl")
+		ui-gmap-google-map(center='map.center', zoom='map.zoom', events = "map.events", options= "map.options")
+			ui-gmap-marker(ng-repeat="m in map.markers" coords="m.coords" icon="m.icon" options= "m.options" idkey="m.id")
+			ui-gmap-polygon(static='false', ng-repeat='p in polygons track by p.id', path='p.path', stroke='p.stroke', visible='p.visible', geodesic='p.geodesic', fill='p.fill', fit='true', editable='p.editable', draggable='p.draggable' events="p.events")
+
+	script(src='js/angular.min.js')
+	script(src='js/google-maps/lodash.js')
+	script(src='js/google-maps/angular-google-maps.js')
+	script(src='js/google-maps/angular-simple-logger.js')
+	script(src='js/controller.map.js')
+
+	//- script(src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDT4qdNJf4m51bucAB9HcXAE6Tdb93k3po")
+//- script(src='app/js/bigmapa.js')
+//- 1- poner el controllador aqui mismo en un script
+	2- poner el iframe en cliente.
+	3- hacer el controller del ifame.
+

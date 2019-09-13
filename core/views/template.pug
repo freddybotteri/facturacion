@@ -1,0 +1,18 @@
+section.hero.is-tittle.is-fullheight
+	.columns
+		aside.column.is-2.aside.hero.is-fullheight.is-hidden-mobile
+			div
+				//- .main href='\#{{item.tmenu_uri}}'ui-sref='{{item.tmenu_uri}}'
+				.main(ng-controller = "menuMain" ng-init="init()")
+					.title GESTION
+						a.item.active(ng-repeat="item in menudata" href='\#{{item.tmenu_uri}}')
+							span.icon.is-hidden-touch.is-hidden-desktop-only
+								i(class="{{item.tmenu_icon}}")
+							span.name {{item.tmenu_text}}
+		.column.is-10.admin-panel
+			div
+				ui-view
+			.hero-foot
+				footer.footer
+script(async='', type='text/javascript', src='/js/bulma.js')
+

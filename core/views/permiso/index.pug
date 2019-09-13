@@ -1,0 +1,39 @@
+//-nav#top.nav.has-shadow(style="background-color:#2d3e63")
+if tipoMenuAdmin == 'admin'
+	menu(menutipe= "'adminGlobal'")
+else
+	menu(menutipe= "'datos'")
+.box
+	.title {{ 'Escunuser' | translate }}
+	form(name="mainF")
+		label.label 
+		p.select.control.has-icon.has-icon-right
+			select.select(name="mySelect" id="mySelect"
+	     			 ng-options="optionUs.tusuario_name for optionUs in $ctrl.ListaUsuarios track by optionUs.tusuario_id"
+	     			 ng-model="$ctrl.usuarioSelected"
+	     			 ng-change="$ctrl.asigOperaciones($ctrl.usuarioSelected)")
+section.section(ng-show='$ctrl.asignarOperaciones')
+	.title Escoja la operacion 
+	a.button.is-prymary(ng-click="$ctrl.btnAgregar()") GUARDAR
+	table.table
+			thead
+				tr
+					th
+					th
+					th {{ 'Nombre' | translate }}
+					th {{ 'descrip' | translate }}
+			tfoot
+				tr
+					th
+					th
+					th {{ 'Nombre' | translate }}
+					th {{ 'descrip' | translate }}
+			tbody
+				tr(ng-repeat="LisOperU in $ctrl.ListaOperaciones")
+					td
+						a.button.is-success(ng-click="updEmpresa(LisOperU)")
+							i.fa.fa-pencil
+					td
+						input(type='checkbox' ng-model="isTrue" ng-checked="{{LisOperU.asignado}}" ng-click="$ctrl.elegirOpe(LisOperU.tops_id,isTrue )")
+					td {{LisOperU.tops_name}}
+					td {{LisOperU.tops_descripcion}}

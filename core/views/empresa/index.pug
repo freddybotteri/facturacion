@@ -1,0 +1,83 @@
+//-nav#top.nav.has-shadow(style="background-color:#2d3e63")
+if tipoMenuAdmin == 'admin'
+	menu(menutipe= "'adminGlobal'")
+else
+	menu(menutipe= "'datos'")
+.box(ng-init="CargaEmpresa()")
+	if tipoMenuAdmin == 'admin'
+		button.button.is-primary.is-outlined( ng-click="mostrarForm()") NUEVO
+	.title Empresa	
+	form(name='empresaForm', ng-show='visible')
+		.content
+			if tipoMenuAdmin == 'admin'
+				label.label {{ 'cod' | translate }}
+				p.control
+					input.input(type='number', placeholder='Codigo', ng-model="data.emp_id", readonly ="true"  name='emp_id')
+			label.label(for='nombre') Nombre
+			p.control
+				input.input(type='text', placeholder='Nombre de la empresa', required, name='emp_nombre', ng-model='data.emp_nombre' ng-class="{ 'is-danger' : empresaForm.emp_nombre.$error.required && !empresaForm.$pristine }")
+			span(ng-show='!empresaForm.$pristine && empresaForm.emp_nombre.$error.required' ng-class="{ 'help is-danger' : empresaForm.emp_nombre.$error.required && !empresaForm.$pristine }") Nombre requerido
+			label.label(for='razon') Razon
+			p.control
+				input.input(type='text', required, name='emp_razons', data-ng-model='data.emp_razons' ng-class="{ 'is-danger' : empresaForm.emp_razons.$error.required && !empresaForm.$pristine }")
+			span(ng-show='!empresaForm.$pristine && empresaForm.emp_razons.$error.required' ng-class="{ 'help is-danger' : empresaForm.emp_razons.$error.required && !empresaForm.$pristine }") Razon requerida
+			label.label(for='telefono') Telefono
+			p.control
+				input.input(type='text', required, name='emp_telefonos', data-ng-model='data.emp_telefonos' ng-class="{ 'is-danger' : empresaForm.emp_telefonos.$error.required && !empresaForm.$pristine }")
+			span(ng-show='!empresaForm.$pristine && empresaForm.emp_telefonos.$error.required' ng-class="{ 'help is-danger' : empresaForm.emp_telefonos.$error.required && !empresaForm.$pristine }") Telefono requerido
+			label.label(for='rtn') RTN
+			p.control
+				input.input(type='text', required, name='emp_rtn', data-ng-model='data.emp_rtn' ng-class="{ 'is-danger' : empresaForm.emp_rtn.$error.required && !empresaForm.$pristine }")
+			span(ng-show='!empresaForm.$pristine && empresaForm.emp_rtn.$error.required' ng-class="{ 'help is-danger' : empresaForm.emp_rtn.$error.required && !empresaForm.$pristine }") RTN requerido
+			if tipoMenuAdmin == 'admin'
+				label.label(for='codigo') Codigo
+				p.control
+					input.input(type='text', required, name='emp_codigo', data-ng-model='data.emp_codigo' ng-class="{ 'is-danger' : empresaForm.emp_codigo.$error.required && !empresaForm.$pristine }")
+				span(ng-show='!empresaForm.$pristine && empresaForm.emp_codigo.$error.required' ng-class="{ 'help is-danger' : empresaForm.emp_codigo.$error.required && !empresaForm.$pristine }") Codigo requerido
+			label.label Estado
+			p.control
+				label.radio
+					input(type='radio', name='emp_sts',ng-model="data.emp_sts" value='1')
+					|&nbsp; Activo
+				label.radio
+					input(type='radio', name='emp_sts',ng-model="data.emp_sts" value='0')
+					|&nbsp; Inactivo
+		if tipoMenuAdmin == 'admin'
+			input.button.is-primary(type='submit', ng-click='btnAgregar(data)' , ng-disabled='!empresaForm.$valid' value="GUARDAR")
+			a.button.is-warning(ng-click='btnLimpiar(empresaForm)') LIMPIAR
+		else
+			input.button.is-primary(type='submit', ng-click='btnAgregar(data)' , ng-disabled='!empresaForm.$valid' value="ACTUALIZAR")
+
+		
+table.table
+		thead
+			tr
+				th
+				th Nombre
+				th Razon
+				th Telefono
+				th RTN
+				if tipoMenuAdmin == 'admin'
+					th Codigo
+		tfoot
+			tr
+				th
+				th Nombre
+				th Razon
+				th Telefono
+				th RTN
+				if tipoMenuAdmin == 'admin'
+					th Codigo
+		tbody
+			tr(ng-repeat="i in ListaEmpresa")
+				td
+					a.button.is-success(ng-click="updEmpresa(i)")
+						i.fa.fa-pencil
+				td {{i.emp_nombre}}
+				td {{i.emp_razons}}
+				td {{i.emp_telefonos}}
+				td {{i.emp_rtn}}
+				if tipoMenuAdmin == 'admin'
+					td {{i.emp_codigo}}
+				
+				
